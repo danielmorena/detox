@@ -1,11 +1,11 @@
-const ADBLogcatTailRecording = require('./ADBLogcatTailRecording');
+const ADBLogcatTailRecording = require('./ADBLogcatRecording');
 
 class ADBLogcatLogger {
   constructor(config) {
     this.adb = config.adb;
   }
 
-  recordLog(artifactPath) {
+  record(artifactPath) {
     return new ADBLogcatTailRecording({
       artifactPath,
     });

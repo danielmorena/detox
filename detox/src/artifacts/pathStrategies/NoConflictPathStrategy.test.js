@@ -16,6 +16,13 @@ describe(NoConflictPathStrategy, () => {
       expect(strategy.rootDir).toMatch(/^[\\/]tmp[\\/]detox_artifacts\.\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
     });
 
+    it('should provide path for unique (per test runner run) artifacts', () => {
+      const artifactPath1 = strategy.constructPathForUniqueArtifact('before-tests-began.log');
+      const expectedPath1 = path.join(strategy.rootDir, 'before-tests-began.log');
+
+      expect(artifactPath1).toBe(expectedPath1);
+    });
+
     it('should provide indexed and nested path for test artifact', () => {
       const test1 = {title: 'test 1', fullName: 'some test 1', status: 'running' };
       const artifactPath1 = strategy.constructPathForTestArtifact(test1, '1.log');

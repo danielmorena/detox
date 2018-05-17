@@ -16,19 +16,33 @@ class NoConflictPathStrategy {
     return this._currentTestRunDir;
   }
 
-  constructPathForTestArtifact(testSummary, artifactName) {
-    const testIndexPrefix = this._getTestIndex(testSummary) + '. ';
-    const testArtifactsDirname = constructSafeFilename(testIndexPrefix, testSummary.fullName);
-    const artifactFilename = constructSafeFilename(artifactName);
-
-    const artifactPath = path.join(
+  constructPathForUniqueArtifact(artifactName) {
+    return path.join(
       this._currentTestRunDir,
-      testArtifactsDirname,
-      artifactFilename
+      constructSafeFilename(artifactName),
+    );
+  }
+
+  constructPathForTestArtifact(testSummary, artifactName) {
+    const testArtifactPath = path.join(
+      this._currentTestRunDir,
+      this._constructDirectoryNameForCurrentRunningTest(testSummary),
+      constructSafeFilename(artifactName),
     );
 
-    this._assertConstructedPathIsStillInsideArtifactsRootDir(artifactPath, testSummary);
-    return artifactPath;
+    this._assertConstructedPathIsStillInsideArtifactsRootDir(testArtifactPath, testSummary);
+    return testArtifactPath;
+  }
+
+  _constructDirectoryNameForCurrentRunningTest(testSummary) {
+    if (testSummary == null) {
+      return '';
+    }
+
+    const testIndexPrefix = this._getTestIndex(testSummary) + '. ';
+    const testArtifactsDirname = constructSafeFilename(testIndexPrefix, testSummary.fullName);
+
+    return testArtifactsDirname;
   }
 
   _assertConstructedPathIsStillInsideArtifactsRootDir(artifactPath, testSummary) {

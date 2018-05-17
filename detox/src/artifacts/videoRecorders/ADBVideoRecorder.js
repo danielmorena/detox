@@ -9,7 +9,7 @@ class ADBVideoRecorder {
     this._videosCounter = 0;
   }
 
-  recordVideo(artifactPath) {
+  record(artifactPath) {
     return new AndroidVideoRecording({
       adb: this.adb,
       artifactPath: ensureExtension(artifactPath, '.mp4'),

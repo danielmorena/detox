@@ -10,7 +10,7 @@ class NonPausableVideoRecorder {
     this.recorder = recorder;
   }
 
-  recordVideo(artifactPath) {
+  record(artifactPath) {
     const recording = this.recorder.recordVideo(artifactPath);
     return new NonPausableVideoRecording(recording);
   }

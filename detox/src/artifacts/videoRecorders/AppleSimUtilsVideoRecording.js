@@ -1,5 +1,4 @@
 const fs = require('fs-extra');
-const sleep = require('../../utils/sleep');
 
 class AppleSimUtilsVideoRecording {
   constructor(config) {
@@ -15,8 +14,6 @@ class AppleSimUtilsVideoRecording {
     await fs.ensureFile(this.temporaryFilePath);
     this.processPromise = this.appleSimUtils.recordVideo(this.udid, this.temporaryFilePath);
     this.process = this.processPromise.childProcess;
-
-    await this._avoidAbruptVideoBeginning();
   }
 
   async stop() {
@@ -24,18 +21,8 @@ class AppleSimUtilsVideoRecording {
       return;
     }
 
-    await this._avoidAbruptVideoEnding();
-
     this.process.kill('SIGINT');
     await this.processPromise;
-  }
-
-  async _avoidAbruptVideoBeginning() {
-    await sleep(500);
-  }
-
-  async _avoidAbruptVideoEnding() {
-    await sleep(500);
   }
 
   async save() {

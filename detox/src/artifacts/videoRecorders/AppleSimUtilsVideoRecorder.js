@@ -8,7 +8,7 @@ class AppleSimUtilsVideoRecorder {
     this.udid = config.udid;
   }
 
-  recordVideo(artifactPath) {
+  record(artifactPath) {
     return new IosVideoRecording({
       appleSimUtils: this.appleSimUtils,
       udid: this.udid,

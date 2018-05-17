@@ -5,7 +5,7 @@ class AppleSimUtilsLogger {
   constructor({}) {
   }
 
-  recordLog(artifactPath) {
+  record(artifactPath) {
     return new AppleSimUtilsLogTailRecording({
       artifactPath,
     });

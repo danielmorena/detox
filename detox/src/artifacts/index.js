@@ -4,7 +4,7 @@ const resolveByDeviceClass = require('./utils/resolveByDeviceClass');
 const ADB = require('../devices/android/ADB');
 const AppleSimUtils = require('../devices/AppleSimUtils');
 
-const ADBLogcatLogger = require('./loggers/ADBLogcatLogger');
+const ADBLogcatLogger = require('./loggers/ADBLogcatRecorder');
 const AppleSimUtilsLogger = require('./loggers/AppleSimUtilsLogger');
 const NoopLogger = require('./loggers/NoopLogger');
 
@@ -17,9 +17,8 @@ const ADBVideoRecorder = require('./videoRecorders/ADBVideoRecorder');
 const NonPausableVideoRecorder = require('./videoRecorders/NonPausableVideoRecorder');
 const NoopVideoRecorder = require('./videoRecorders/NoopVideoRecorder');
 
-const LoggerHooks = require('./hooks/LoggerHooks');
-const ScreenshotterHooks = require('./hooks/ScreenshotterHooks');
-const VideoRecorderHooks = require('./hooks/VideoRecorderHooks');
+const RecorderHooks = require('./hooks/RecorderHooks');
+const SnapshotterHooks = require('./hooks/SnapshotterHooks');
 
 const NoConflictPathStrategy = require('./pathStrategies/NoConflictPathStrategy');
 const ArtifactsManager = require('./ArtifactsManager');
@@ -96,10 +95,10 @@ const resolve = {
       log: _.once((api) => {
         const { recordLogs } = api.getConfig();
 
-        return new LoggerHooks({
+        return new RecorderHooks({
           enabled: recordLogs !== 'none',
-          keepOnlyFailedTestLogs: recordLogs === 'failing',
-          logger: resolve.artifacts.logger.default(api),
+          keepOnlyFailedTestRecordings: recordLogs === 'failing',
+          recorder: resolve.artifacts.logger.default(api),
           pathStrategy: resolve.artifacts.pathStrategy(api),
         });
       }),
@@ -107,10 +106,10 @@ const resolve = {
       screenshot: _.once((api) => {
         const { takeScreenshots } = api.getConfig();
 
-        return new ScreenshotterHooks({
+        return new SnapshotterHooks({
           enabled: takeScreenshots !== 'none',
-          keepOnlyFailedTestScreenshots: takeScreenshots === 'failing',
-          screenshotter: resolve.artifacts.screenshotter.default(api),
+          keepOnlyFailedTestsSnapshots: takeScreenshots === 'failing',
+          snapshotter: resolve.artifacts.screenshotter.default(api),
           pathStrategy: resolve.artifacts.pathStrategy(api),
         });
       }),
@@ -118,7 +117,7 @@ const resolve = {
       video: _.once((api) => {
         const { recordVideos } = api.getConfig();
 
-        return new VideoRecorderHooks({
+        return new RecorderHooks({
           enabled: recordVideos !== 'none',
           keepOnlyFailedTestRecordings: recordVideos === 'failing',
           recorder: resolve.artifacts.videoRecorder.default(api),

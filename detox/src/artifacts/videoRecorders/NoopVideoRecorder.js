@@ -6,7 +6,7 @@ class NoopVideoRecording {
 }
 
 class NoopVideoRecorder {
-  recordVideo() {
+  record() {
     return new NoopVideoRecording();
   }
 }
